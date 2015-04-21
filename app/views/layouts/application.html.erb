@@ -1,10 +1,27 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Tuto | <%= @title %></title>
+    <title>MyMoviez | <%= @title %></title>
     <%= csrf_meta_tag %>
   </head>
   <body>
-    <%= yield %>
+  	<header>
+  		<h1>MyMoviez</h1>
+  		<h2>Vos listes de films, en 1 clic !</h2>
+  	</header>
+  	<div id="menu">
+  		<ul>
+  			<li><a href="/pages/home">Accueil</a></li>
+  			<li><a href="/pages/contact">Contact</a></li>
+  			<li><a href="/pages/about">À Propos</a></li>
+  			<li><a href="/pages/help">Aide</a></li>
+  		</ul>
+  	</div>
+    <div id="container">
+    	<%= yield %>
+    </div>
+    <footer>
+    	-- &copy; <a href="mailto:caparenlive59@gmail.com">caparenlive59</a> - 2015 - Tout droits réservés -- alpha 0.0.1
+    </footer>
   </body>
 </html>
