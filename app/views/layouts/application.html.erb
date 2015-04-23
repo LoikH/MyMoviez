@@ -12,6 +12,7 @@
       <section class="main round shadow">
       	<%= yield %>
       </section>
+      <%= debug(params) if Rails.env.development? %>
       <%= render 'layouts/footer' %>
     </div>
   </body>
