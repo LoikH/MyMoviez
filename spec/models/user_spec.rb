@@ -2,11 +2,13 @@
 #
 # Table name: users
 #
-#  id         :integer          not null, primary key
-#  username   :string(255)
-#  email      :string(255)
-#  created_at :datetime
-#  updated_at :datetime
+#  id                 :integer          not null, primary key
+#  username           :string(255)
+#  email              :string(255)
+#  created_at         :datetime
+#  updated_at         :datetime
+#  encrypted_password :string(255)
+#  salt               :string(255)
 #
 
 require 'rails_helper'
@@ -14,7 +16,12 @@ require 'rails_helper'
 RSpec.describe User, type: :model do
 
   before(:each) do
-    @attr = { :username => "Example User", :email => "user@example.com" }
+    @attr = {
+      :username => "Utilisateur exemple",
+      :email => "user@example.com",
+      :password => "foobar",
+      :password_confirmation => "foobar"
+    }
   end
 
   it "should create new User" do
@@ -65,4 +72,72 @@ RSpec.describe User, type: :model do
     user_with_duplicate_email = User.new(@attr)
     expect(user_with_duplicate_email).not_to be_valid
   end
+
+  describe "password validations" do
+
+    it "should require password" do
+      expect(User.new(@attr.merge(:password => "", :password_confirmation => ""))).not_to be_valid
+    end
+
+    it "should require correct password_confirmation" do
+      expect(User.new(@attr.merge(:password_confirmation => "invalid"))).not_to be_valid
+    end
+
+    it "should reject small password" do
+      short = "a" * 5
+      hash = @attr.merge(:password => short, :password_confirmation => short)
+      expect(User.new(hash)).not_to be_valid
+    end
+
+    it "should reject long password" do
+      long = "a" * 33
+      hash = @attr.merge(:password => long, :password_confirmation => long)
+      expect(User.new(hash)).not_to be_valid
+    end
+  end
+
+  describe "password encryption" do
+
+    before(:each) do
+      @user = User.create!(@attr)
+    end
+
+    it "should have encrypted password" do
+      expect(@user).to respond_to(:encrypted_password)
+    end
+
+    it "should define encrypted password" do
+      expect(@user.encrypted_password).not_to be_blank
+    end
+
+    describe "method has_password?" do
+
+      it "she be true if passwords are same" do
+        expect(@user.has_password?(@attr[:password])).to be_truthy
+      end    
+
+      it "she be false if passwords are not the same" do
+        expect(@user.has_password?("invalide")).to be_falsey
+      end 
+    end
+
+    describe "authenticate method" do
+
+      it "should return nil if wrong email/password" do
+        wrong_password_user = User.authenticate(@attr[:email], "wrongpass")
+        expect(wrong_password_user).to be_nil
+      end
+
+      it "Should return nil if no user find" do
+        nonexistent_user = User.authenticate("bar@foo.com", @attr[:password])
+        expect(nonexistent_user).to be_nil
+      end
+
+      it "should return user if good email/password" do
+        matching_user = User.authenticate(@attr[:email], @attr[:password])
+        expect(matching_user).to eq(@user)
+      end
+    end
+  end
+
 end

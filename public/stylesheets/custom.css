@@ -71,6 +71,21 @@ section h1 {
   font-size: 200%;
 }
 
+section a {
+  color: #000;
+  text-decoration: underline;
+}
+
+section a:hover {
+  color: #696969;
+  text-decoration: none;
+}
+
+section a:visited {
+  color: #696969;
+  text-decoration: none;
+}
+
 /* Liens */
 
 a {
@@ -281,4 +296,28 @@ footer nav {
   -webkit-box-shadow: 0px -5px 15px 0px rgba(0,0,0,0.75);
 -moz-box-shadow: 0px -5px 15px 0px rgba(0,0,0,0.75);
 box-shadow: 0px -5px 15px 0px rgba(0,0,0,0.75);
+}
+
+/* User show page */
+
+table.profile {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+td.main {
+  width: 70%;
+  padding: 1em;
+}
+
+td.sidebar {
+  width: 30%;
+  padding: 1em;
+  vertical-align: top;
+  background: #D3D3D3;
+}
+
+.profile img.gravatar {
+  border: 1px solid #999;
+  margin-bottom: -15px;
 }

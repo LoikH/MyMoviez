@@ -9,7 +9,7 @@
     <div class="container">
     	<%= render 'layouts/header' %>
     	<%= render 'layouts/menu' %>
-      <section class="main round shadow">
+      <section class="round shadow">
       	<%= yield %>
       </section>
       <%= debug(params) if Rails.env.development? %>
