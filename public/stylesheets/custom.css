@@ -8,13 +8,22 @@
   src: url('../fonts/orange.ttf');
 }
 
+* {-moz-box-sizing: border-box; box-sizing: border-box;}
+
+html {
+    height: 100%;
+}
+
 
 .container {
   width: 100%;
 }
 
 body {
+  min-height: 100%;
   background: #DCDCDC;
+  position: relative;
+  padding-bottom: 60px;
 }
 
 header {
@@ -320,4 +329,58 @@ td.sidebar {
 .profile img.gravatar {
   border: 1px solid #999;
   margin-bottom: -15px;
+}
+
+/* Forms */
+div.field, div.actions {
+  margin-bottom: 10px;
+}
+
+.field_with_errors {
+  margin-top: 10px;
+  padding: 2px;
+  display: inline;
+}
+
+.field_with_errors label {
+  color: #c00;
+}
+
+.field_with_errors input {
+  background-color: #F08080;
+}
+
+#error_explanation {
+  width: 400px;
+  border: 2px solid red;
+  padding: 7px;
+  padding-bottom: 12px;
+  margin-bottom: 20px;
+  background-color: #F08080;
+}
+
+#error_explanation h2 {
+  text-align: left;
+  font-weight: bold;
+  padding: 5px 5px 5px 15px;
+  font-size: 14px;
+  margin: -7px;
+  background-color: #c00;
+  color: #fff;
+}
+
+#error_explanation p {
+  color: #333;
+  margin-top: 5px;
+  margin-bottom: 0;
+  padding: 5px;
+}
+
+#error_explanation ul {
+  margin: 0;
+}
+
+#error_explanation ul li {
+  font-size: 12px;
+  list-style: square;
 }

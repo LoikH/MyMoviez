@@ -44,6 +44,12 @@ RSpec.describe User, type: :model do
     expect(bad_guy).not_to be_valid
   end
 
+  it "username length should should be >= 4" do
+    short_name = "a" * 3
+    bad_guy = User.new(@attr.merge(:username => short_name))
+    expect(bad_guy).not_to be_valid
+  end
+
   it "email should be valid" do
     addresses = %w[user@foo.com THE_USER@foo.bar.org first.last@foo.jp]
     addresses.each do |address|
