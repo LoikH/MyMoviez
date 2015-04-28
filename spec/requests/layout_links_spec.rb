@@ -65,4 +65,47 @@ RSpec.describe "LayoutLinks", type: :request do
       expect(response.body).to have_selector("title", :text => @base_title+" | Inscription", :visible => false)
     end
   end
+
+  describe "when not connected" do
+    it "should have connect link" do
+      visit root_path
+      expect(page).to have_selector("a[href='#{signin_path}']")
+    end
+
+    it "should not have connect link" do
+      visit root_path
+      expect(page).not_to have_selector("a[href='#{signout_path}']")
+    end
+  end
+
+  describe "when connected" do
+
+    before(:each) do
+      @user = create(:user)
+      visit signin_path
+      fill_in "Email",    :with => @user.email
+      fill_in "Mot de passe", :with => @user.password
+      click_button "Se connecter"
+    end
+
+    it "should have disconnect link" do
+      visit root_path
+      expect(page).to have_selector("a[href='#{signout_path}']")
+    end
+
+    it "should not have connect link" do
+      visit root_path
+      expect(page).not_to have_selector("a[href='#{signin_path}']")
+    end
+
+    it "should not have register link" do
+      visit root_path
+      expect(page).not_to have_selector("a[href='#{signup_path}']")
+    end
+
+    it "should have profil link" do
+      visit root_path
+      expect(page).to have_selector("a[href='#{user_path(@user)}']")
+    end
+  end
 end

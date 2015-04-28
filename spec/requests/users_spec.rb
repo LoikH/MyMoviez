@@ -1,12 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe "Users", type: :request do
-  describe "GET /users" do
-    it "works! (now write some real specs)" do
-      get users_index_path
-      expect(response).to have_http_status(200)
-    end
-  end
+  # describe "GET /users" do
+  #   it "works! (now write some real specs)" do
+  #     get users_index_path
+  #     expect(response).to have_http_status(200)
+  #   end
+  # end
 
   describe "registration" do
 
@@ -43,5 +43,20 @@ RSpec.describe "Users", type: :request do
       end
     end
   end
+  
+  describe "Singnin/Signout" do
+
+    describe "fail" do
+      it "should not connect user" do
+        visit signin_path
+        fill_in "Email",    :with => ""
+        fill_in "Mot de passe", :with => ""
+        click_button "Se connecter"
+        expect(page).to have_selector("div.flash.error", :text => "invalide")
+      end
+    end
+
+  end
+
 
 end

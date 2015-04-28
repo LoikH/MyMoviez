@@ -11,7 +11,7 @@ RSpec.describe UsersController, type: :controller do
 
     it "title is MyMoviez | Inscription" do
       get :new
-      expect(response.body).to have_selector("title", :text => "MyMoviez | Inscription", :visible => false)
+      expect(response.body).to have_selector("title", :text => "Inscription", :visible => false)
     end
 
 
@@ -64,7 +64,12 @@ RSpec.describe UsersController, type: :controller do
           it "should has welcome message" do
             post :create, :user => @attr
             expect(flash[:success]).to match /Bienvenue dans MyMoviez/i
-          end    
+          end   
+
+           it "should connect user" do
+            post :create, :user => @attr
+            expect(controller).to be_signed_in
+          end
         end
       end
 

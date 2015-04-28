@@ -1,6 +1,12 @@
-<h1>Bienvenue !</h1>
+<h1>Bienvenue sur MyMoviez!</h1>
 <p>
   Ceci est la page d'accueil de MyMoviez.
 </p>
 
+
+<% if signed_in? %>
+<p>Vous êtes connecté en tant que <strong><%= current_user.username %></strong>.</p>
+<p>Accéder à <%= link_to "votre profil", current_user %></p>
+<% else %>
 <%= link_to "S'inscrire maintenant !", signup_path, :class => "signup_button round" %>
+<% end %>

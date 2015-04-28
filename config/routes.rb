@@ -1,8 +1,12 @@
 Rails.application.routes.draw do
 
   resources :users
-  get '/signup', :to => 'users#new'
+  resources :sessions, :only => [:new, :create, :destroy]
 
+  get '/signup', :to => 'users#new'
+  get '/signin',  :to => 'sessions#new'
+  get '/signout' => 'sessions#destroy' 
+  
   get '/contact', :to => 'pages#contact'
   get '/about',   :to => 'pages#about'
   get '/help',    :to => 'pages#help'
