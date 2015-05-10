@@ -28,6 +28,8 @@ gem 'capybara'
 
 gem 'gravatar_image_tag'
 
+gem 'will_paginate'
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
@@ -47,6 +49,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin]
 group :development do
   gem 'rspec-rails'
   gem 'annotate'
+  gem 'faker'
 end
 
 group :test do

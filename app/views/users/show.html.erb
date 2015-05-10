@@ -9,6 +9,10 @@
     <td class="sidebar">
       <strong>Nom</strong> <%= @user.username %><br />
       <strong>URL</strong>  <%= link_to user_path(@user), @user %>
+      <% if current_user == @user %>
+      <br />
+      <%= link_to "Edition du Profil", edit_user_path(current_user) %>
+      <% end %>
     </td>
   </tr>
 </table>

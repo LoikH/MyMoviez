@@ -19,7 +19,7 @@ RSpec.describe "Users", type: :request do
           fill_in "Email", :with => ""
           fill_in "Mot de passe", :with => ""
           fill_in "Confirmation", :with => ""
-          click_button "Inscription"
+          click_button "Valider"
           expect(page).to render_template('users/new')
           expect(page).to have_selector("div#error_explanation")
         end).not_to change(User, :count)
@@ -35,7 +35,7 @@ RSpec.describe "Users", type: :request do
           fill_in "Email", :with => "jm@rdr.com"
           fill_in "Mot de passe", :with => "redisdead"
           fill_in "Confirmation", :with => "redisdead"
-          click_button "Inscription"
+          click_button "Valider"
           expect(page).to have_selector("div.flash.success",
                                         :text => "Bienvenue")
           expect(page).to render_template('users/show')

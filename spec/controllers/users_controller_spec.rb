@@ -79,6 +79,25 @@ RSpec.describe UsersController, type: :controller do
           @user = create(:user)
         end
 
+        describe "Fail" do
+
+          it "should redirect to signin page" do
+            get :show, :id => @user
+            expect(response).to redirect_to(signin_path)
+          end
+
+          it "should have notice flash" do
+            get :show, :id => @user
+            expect(flash[:notice]).to match /Vous devez vous identifier pour rejoindre cette page/i
+          end
+        end
+
+        describe "success" do
+
+          before(:each) do
+            test_sign_in(@user)
+          end
+
         it "returns http success" do
           get :show, :id => @user
           expect(response).to have_http_status(:success)
@@ -104,5 +123,161 @@ RSpec.describe UsersController, type: :controller do
           expect(response.body).to have_selector("h1>img[class='gravatar']")
         end
       end
-
     end
+
+  describe "GET 'edit'" do
+
+    before(:each) do
+      @user = create(:user)
+      test_sign_in(@user)
+    end
+
+    it "should success" do
+      get :edit, :id => @user
+      expect(response).to have_http_status(:success)
+    end
+
+    it "should have good title" do
+      get :edit, :id => @user
+      expect(response.body).to have_selector("title", :text => "Edition du profil", :visible => false)
+    end
+
+    it "should have link to gravatar" do
+      get :edit, :id => @user
+      gravatar_url = "http://gravatar.com/emails"
+      expect(response.body).to have_selector("a[href='#{gravatar_url}']")
+    end
+  end
+
+  describe "PUT 'update'" do
+
+  before(:each) do
+      @user = create(:user)
+      test_sign_in(@user)
+    end
+
+    describe "failure" do
+
+      before(:each) do
+        @attr = { :email => "", :username => "", :password => "",
+                  :password_confirmation => "" }
+      end
+
+        it "should has good title" do
+          put :update, :id => @user, :user => @attr
+          expect(response.body).to have_selector("title", :text => "Edition du profil", :visible => false)
+        end
+
+        it "should render 'edit' page" do
+          put :update, :id => @user, :user => @attr
+          expect(response).to render_template('edit')
+        end
+      end
+
+      describe "success" do
+
+        before(:each) do
+          @attr = { :username => "New Name", :email => "user@example.com",
+            :password => "foobar", :password_confirmation => "foobar" }
+          end
+
+          it "should update user data" do
+            put :update, :id => @user, :user => @attr
+            @user.reload
+            expect(@user.username).to  eq(@attr[:username])
+            expect(@user.email).to eq(@attr[:email])
+          end
+
+          it "should redirect to user page" do
+            put :update, :id => @user, :user => @attr
+            expect(response).to redirect_to(user_path(@user))
+          end
+
+          it "should has welcome message" do
+            put :update, :id => @user, :user => @attr
+            expect(flash[:success]).to match /actualisé/i
+          end   
+
+        end
+      end
+
+  describe "authentification des pages edit/update" do
+
+    before(:each) do
+      @user = create(:user)
+    end
+
+    describe "pour un utilisateur non identifié" do
+
+      it "devrait refuser l'acccès à l'action 'edit'" do
+        get :edit, :id => @user
+        expect(response).to redirect_to(signin_path)
+      end
+
+      it "devrait refuser l'accès à l'action 'update'" do
+        put :update, :id => @user, :user => {}
+        expect(response).to redirect_to(signin_path)
+      end
+    end
+
+    describe "pour un utilisateur identifié" do
+
+      before(:each) do
+        wrong_user = create(:user, :email => "user@example.net")
+        test_sign_in(wrong_user)
+      end
+
+      it "devrait correspondre à l'utilisateur à éditer" do
+        get :edit, :id => @user
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "devrait correspondre à l'utilisateur à actualiser" do
+        put :update, :id => @user, :user => {}
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+  end
+
+
+  describe "GET 'index'" do
+
+    describe "pour utilisateur non identifiés" do
+      it "devrait refuser l'accès" do
+        get :index
+        expect(response).to redirect_to(signin_path)
+        expect(flash[:notice]).to match /identifier/i
+      end
+    end
+
+    describe "pour un utilisateur identifié" do
+
+      before(:each) do
+        @user = test_sign_in(create(:user))
+        second = create(:user, :email => "another@example.com")
+        third  = create(:user, :email => "another@example.net")
+
+        @users = [@user, second, third]
+      end
+
+      it "devrait réussir" do
+        get :index
+        expect(response).to be_success
+      end
+
+      it "devrait avoir le bon titre" do
+        get :index
+        expect(response.body).to have_selector("title", :text => "Liste des utilisateurs", :visible => false)
+      end
+
+      it "devrait avoir un élément pour chaque utilisateur" do
+        get :index
+        @users.each do |user|
+          expect(response.body).to have_selector("li", :text => user.username)
+        end
+      end
+    end
+  end
+
+end

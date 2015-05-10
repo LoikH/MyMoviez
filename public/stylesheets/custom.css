@@ -384,3 +384,20 @@ div.field, div.actions {
   font-size: 12px;
   list-style: square;
 }
+
+.userlist {
+  margin-top: 1em;
+  list-style-type: none;
+}
+
+.userlist li {
+  height: 36px;
+  padding: 3px;
+  margin: 3px
+}
+
+.userlist li div {
+  height: 36px;
+  display:inline-block;
+  vertical-align:middle;
+}
